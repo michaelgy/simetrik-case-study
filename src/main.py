@@ -1,17 +1,21 @@
-import os
+from pathlib import Path
 from dotenv import load_dotenv
-from src.application.wp_webhook_handler import WPWebhookHandler
+from src.application.api_handler import APIHandler
 
 def main():
-    # Load environment variables
-    load_dotenv("./env/.env")
+    # Get the absolute path to the project root directory
+    project_root = Path(__file__).parent.parent
     
-    # Create and run webhook handler
-    webhook = WPWebhookHandler()
-    print("Starting WhatsApp webhook server...")
+    # Load environment variables using absolute path
+    env_path = project_root / "env" / ".env"
+    load_dotenv(env_path)
+    
+    # Create and run apiHandler handler
+    apiHandler = APIHandler()
+    print("Starting Api Handler server...")
     print("Server running at: http://127.0.0.1:5001")
-    print("Use ngrok to expose the webhook: ngrok http 5001")
-    webhook.run()
+    print("Use ngrok to expose the api: ngrok http 5001")
+    apiHandler.run()
 
 if __name__ == "__main__":
     main() 

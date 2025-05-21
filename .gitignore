@@ -7,3 +7,5 @@ __pycache__/
 *.pyd
 *.pyw
 *.pyz
+# Ignore Excel temporary files
+~$*

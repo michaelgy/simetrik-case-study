@@ -6,6 +6,7 @@ class WhatsAppService:
     def __init__(self):
         self.api_key = os.getenv("WASENDER_API_KEY")
         self.phone_id = os.getenv("WASENDER_PHONE_ID")
+            
         self.base_url = "https://www.wasenderapi.com/api"
 
     def send_message(self, to: str, message: str) -> bool:
@@ -17,6 +18,9 @@ class WhatsAppService:
         Returns:
             bool: True if message was sent successfully, False otherwise
         """
+        if not self.api_key:
+            return False
+            
         url = f"{self.base_url}/send-message"
         headers = {
             "Authorization": f"Bearer {self.api_key}",

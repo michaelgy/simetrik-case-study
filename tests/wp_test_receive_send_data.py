@@ -27,6 +27,7 @@ def webhook():
     if result:
         sender_id, message_text = result
         sender_phone = f"+{sender_id.split('@')[0]}"
+        print(f"Sending message to {sender_phone}: {message_text}")
         whatsapp_service.send_message(
             sender_phone,
             f"[ECHO] Received your message: {message_text}"
