@@ -5,7 +5,7 @@ from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import MemorySaver
 
 class GeminiTextAgent:
-    def __init__(self, tools: List[Any] = None):
+    def __init__(self, tools: List[Any] = None, max_iterations: int = 15, max_execution_time: int = 60):
         """
         Initialize the Gemini Text Agent
         Args:
@@ -17,8 +17,10 @@ class GeminiTextAgent:
         self.agent_executor = create_react_agent(
             self.model, 
             self.tools, 
-            checkpointer=self.memory
+            checkpointer=self.memory,
         )
+        self.max_iterations = max_iterations
+        self.max_execution_time = max_execution_time
         self.config = {"configurable": {"thread_id": "default"}}
 
     def set_thread_id(self, thread_id: str):
@@ -37,13 +39,20 @@ class GeminiTextAgent:
         Returns:
             str: The agent's response
         """
+        
+        # Create config with recursion limit (controls reasoning steps)
+        config = self.config.copy()
+        config["recursion_limit"] = self.max_iterations
+
         response_chunks = []
         for chunk in self.agent_executor.stream(
             {"messages": [HumanMessage(content=message)]}, 
-            self.config
+            config
         ):
-            response = "\n".join([ch.content for ch in chunk["agent"]["messages"]])
-            response_chunks.append(response)
+            print("chunk", chunk)
+            if "agent" in chunk:
+                response = "\n".join([ch.content for ch in chunk["agent"]["messages"]])
+                response_chunks.append(response)
         
         return "\n".join(response_chunks)
 

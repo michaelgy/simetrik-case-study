@@ -91,6 +91,19 @@ if transaction_service.transactions.update_state(movement_number, new_state):
 else:
     print(f"Failed to update state of transaction {movement_number}")
 
+# Update transaction fields
+print("\nUpdating transaction fields:")
+update_data = {
+    'Concepto': 'Pago Servicio Actualizado',
+    'Monto': 17500.0,
+    'REMITENTE': 'Banco A Actualizado'
+}
+if transaction_service.transactions.update('N° Movimiento', movement_number, update_data):
+    print(f"Updated fields of transaction {movement_number}:")
+    print(update_data)
+else:
+    print(f"Failed to update fields of transaction {movement_number}")
+
 # ===== SECTION 2: EMAIL HISTORY OPERATIONS =====
 print("\n=== EMAIL HISTORY OPERATIONS ===")
 

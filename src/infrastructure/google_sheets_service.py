@@ -6,7 +6,7 @@ from gspread_dataframe import set_with_dataframe, get_as_dataframe
 from google.oauth2.service_account import Credentials
 
 class GoogleSheetsService:
-    def __init__(self, service_account_file: str, sheet_id: str, worksheet_name: str):
+    def __init__(self, service_account_file: str, sheet_id: str, worksheet_name: str, converters: Dict[str, Any] = None):
         """
         Initialize the Google Sheets Service
         Args:
@@ -23,6 +23,7 @@ class GoogleSheetsService:
         ]
         self.worksheet = self._initialize_worksheet()
         # Initialize DataFrame from worksheet
+        self.converters = converters
         self._df = self._load_dataframe()
 
     def _initialize_worksheet(self):
@@ -45,7 +46,7 @@ class GoogleSheetsService:
         Returns:
             DataFrame containing worksheet data
         """
-        return get_as_dataframe(self.worksheet)
+        return get_as_dataframe(self.worksheet, converters=self.converters)
 
     def read_all_data(self) -> pd.DataFrame:
         """

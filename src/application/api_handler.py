@@ -13,6 +13,7 @@ from src.infrastructure.xlsx_parser import XLSXParser
 from src.infrastructure.email_service import EmailService
 from src.infrastructure.whatsapp_service import WhatsAppService
 from src.infrastructure.whatsapp_messages_queue import WhatsappMessagesQueue
+from src.infrastructure.transaction_sheet_tools import TransactionSheetTools
 
 # Application
 from src.application.file_processor_handler import create_file_processor_blueprint
@@ -32,13 +33,19 @@ class APIHandler:
 
         # Initialize Services
         self.whatsapp_service = WhatsAppService()
-        self.text_chat_agent = GeminiTextAgent()
         self.file_parser = XLSXParser()
         self.transaction_sheet_service = TransactionSheetService(service_account_file, sheet_id)
         self.google_drive_service = GoogleDriveService(service_account_file, folder_uploaded_transactions_id)
         self.email_service = EmailService(service_account_file, user_email)
         self.whatsapp_service = WhatsAppService()
         self.whatsapp_messages_queue = WhatsappMessagesQueue(self.whatsapp_service)
+
+        # Initialize Tools
+        self.transaction_sheet_tools = TransactionSheetTools(self.transaction_sheet_service)
+
+        # Initialize Agents
+        self.text_chat_agent = GeminiTextAgent(self.transaction_sheet_tools.tools)
+
         self._register_blueprints()
 
     def _register_blueprints(self):

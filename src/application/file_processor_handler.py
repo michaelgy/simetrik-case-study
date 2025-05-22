@@ -51,7 +51,7 @@ def create_file_processor_blueprint(file_parser, transaction_service, google_dri
             file_stream = io.BytesIO(file.read())
             
             # Parse the uploaded file
-            new_transactions_df = file_parser.read_file(file_stream, converters={'TELEFONO': str})
+            new_transactions_df = file_parser.read_file(file_stream, converters=transaction_service.CONVERTERS)
             
             # Get existing transactions
             transaction_service.reload_all_data()
@@ -67,10 +67,10 @@ def create_file_processor_blueprint(file_parser, transaction_service, google_dri
                 return jsonify({"response": "No new transactions to process"})
 
             # Split transactions based on QUERY value
-            protocol_2b_df = new_transactions_df[new_transactions_df['QUERY'] == 2].copy()
-            protocol_3c_df = new_transactions_df[new_transactions_df['QUERY'] == 3].copy()
+            protocol_2b_df = new_transactions_df[new_transactions_df['QUERY'] == "2"].copy()
+            protocol_3c_df = new_transactions_df[new_transactions_df['QUERY'] == "3"].copy()
             no_procesado_df = new_transactions_df[
-                ~new_transactions_df['QUERY'].isin([2, 3])
+                ~new_transactions_df['QUERY'].isin(["2", "3"])
             ].copy()
 
             # Add state to each DataFrame

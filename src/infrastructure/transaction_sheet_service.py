@@ -7,6 +7,15 @@ from .worksheets.email_history_worksheet import EmailHistoryWorksheet
 from .worksheets.whatsapp_history_worksheet import WhatsAppHistoryWorksheet
 from .worksheets.states_worksheet import StatesWorksheet
 
+def parse_number(value):
+    if isinstance(value, str):
+        # Remove thousands separator and replace decimal comma with dot
+        value = value.replace('.', '').replace(',', '.')
+    try:
+        return float(value)
+    except ValueError:
+        return None  # or handle the error as needed
+
 class TransactionSheetService:
     # Default column definitions
     TRANSACTIONS_COLUMNS = [
@@ -22,6 +31,22 @@ class TransactionSheetService:
     WHATSAPP_HISTORY_COLUMNS = [
         'Fecha', 'N° Movimiento', 'WP ID', 'Mensaje'
     ]
+
+    CONVERTERS = {
+        'Fecha': str,
+        'Concepto': str,
+        'N° Movimiento': int,
+        'Referencia': str,
+        'Monto': parse_number,
+        'QUERY': str,
+        'CORREO': str,
+        'TELEFONO': str,
+        'REMITENTE': str,
+        'ESTADO DE REMEDIACION': str,
+        'EMAIL ID': str,
+        'WP ID': str,
+        'ARCHIVO': str
+    }
 
     # Constants
     DATE_FORMAT = '%d/%m/%Y %H:%M:%S'
@@ -41,7 +66,8 @@ class TransactionSheetService:
             GoogleSheetsService(
                 service_account_file=service_account_file,
                 sheet_id=sheet_id,
-                worksheet_name='Transacciones'
+                worksheet_name='Transacciones',
+                converters=self.CONVERTERS
             )
         )
         
