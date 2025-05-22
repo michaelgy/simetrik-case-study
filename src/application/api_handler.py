@@ -10,6 +10,9 @@ from src.infrastructure.transaction_sheet_service import TransactionSheetService
 from src.infrastructure.whatsapp_service import WhatsAppService
 from src.infrastructure.gemini_text_agent import GeminiTextAgent
 from src.infrastructure.xlsx_parser import XLSXParser
+from src.infrastructure.email_service import EmailService
+from src.infrastructure.whatsapp_service import WhatsAppService
+from src.infrastructure.whatsapp_messages_queue import WhatsappMessagesQueue
 
 # Application
 from src.application.file_processor_handler import create_file_processor_blueprint
@@ -25,7 +28,7 @@ class APIHandler:
         sheet_id = os.getenv('GOOGLE_SHEET_TRANSACTION_ID')
         folder_uploaded_transactions_id = os.getenv('GOOGLE_UPLOADED_TRANSACTIONS_FOLDER_ID')
         service_account_file = './env/service_account_gmail-agent.json'
-        worksheet_name = 'Transacciones'
+        user_email = os.getenv('USER_EMAIL') 
 
         # Initialize Services
         self.whatsapp_service = WhatsAppService()
@@ -33,18 +36,26 @@ class APIHandler:
         self.file_parser = XLSXParser()
         self.transaction_sheet_service = TransactionSheetService(service_account_file, sheet_id)
         self.google_drive_service = GoogleDriveService(service_account_file, folder_uploaded_transactions_id)
-        
+        self.email_service = EmailService(service_account_file, user_email)
+        self.whatsapp_service = WhatsAppService()
+        self.whatsapp_messages_queue = WhatsappMessagesQueue(self.whatsapp_service)
         self._register_blueprints()
 
     def _register_blueprints(self):
         self.app.register_blueprint(create_webhook_blueprint(self.whatsapp_service))
         self.app.register_blueprint(create_text_chat_agent_blueprint(self.text_chat_agent))
-        self.app.register_blueprint(create_file_processor_blueprint(self.file_parser, self.transaction_sheet_service, self.google_drive_service))
+        self.app.register_blueprint(create_file_processor_blueprint(
+            self.file_parser, 
+            self.transaction_sheet_service, 
+            self.google_drive_service,
+            self.email_service,
+            self.whatsapp_messages_queue
+        ))
     
     def run(self, host: str = '127.0.0.1', port: int = 5001):
         print("Starting Api Handler server...")
         print(f"Server running at: http://{host}:{port}")
-        print(f"Use ngrok to expose the api: ngrok http {port}")
+        print(f"Use ngrok to expose the api: ngrok http --url=hamster-innocent-cicada.ngrok-free.app http://{host}:{port}")
 
         print("### Available endpoints:")
         for rule in self.app.url_map.iter_rules():

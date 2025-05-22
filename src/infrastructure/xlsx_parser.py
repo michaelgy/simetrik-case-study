@@ -3,9 +3,9 @@ import pandas as pd
 
 class XLSXParser:
     @staticmethod
-    def read_file(file: BytesIO) -> pd.DataFrame:
+    def read_file(file: BytesIO, converters= None) -> pd.DataFrame:
         # Read the Excel file and return a DataFrame
-        df = pd.read_excel(file)
+        df = pd.read_excel(file, converters=converters)
         
         return df
     
