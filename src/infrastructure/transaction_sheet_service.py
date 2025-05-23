@@ -6,47 +6,22 @@ from .worksheets.transactions_worksheet import TransactionsWorksheet
 from .worksheets.email_history_worksheet import EmailHistoryWorksheet
 from .worksheets.whatsapp_history_worksheet import WhatsAppHistoryWorksheet
 from .worksheets.states_worksheet import StatesWorksheet
+from src.domain.types import TransactionsConverters, TransactionsTypes, TransactionsConvertersPreSave, EmailHistoryConverters, EmailHistoryConvertersPreSave,EmailHistoryTypes, WPHistoryTypes, WPHistoryConverters, WPHistoryConvertersPreSave
 
-def parse_number(value):
-    if isinstance(value, str):
-        # Remove thousands separator and replace decimal comma with dot
-        value = value.replace('.', '').replace(',', '.')
-    try:
-        return float(value)
-    except ValueError:
-        return None  # or handle the error as needed
 
 class TransactionSheetService:
     # Default column definitions
-    TRANSACTIONS_COLUMNS = [
-        'Fecha', 'Concepto', 'N° Movimiento', 'Referencia', 'Monto',
-        'QUERY', 'CORREO', 'TELEFONO', 'REMITENTE', 'ESTADO DE REMEDIACION',
-        'EMAIL ID', 'WP ID', 'ARCHIVO'
-    ]
+    CONVERTERS = TransactionsConverters.copy()
+    TYPES = TransactionsTypes.copy()
+    CONVERTERS_PRE_SAVE = TransactionsConvertersPreSave.copy()
     
-    EMAIL_HISTORY_COLUMNS = [
-        'Fecha', 'N° Movimiento', 'EMAIL ID', 'Mensaje'
-    ]
+    EMAILHISTORY_CONVERTERS = EmailHistoryConverters
+    EMAILHISTORY_TYPES = EmailHistoryTypes
+    EMAILHISTORY_CONVERTERS_PRE_SAVE = EmailHistoryConvertersPreSave
     
-    WHATSAPP_HISTORY_COLUMNS = [
-        'Fecha', 'N° Movimiento', 'WP ID', 'Mensaje'
-    ]
-
-    CONVERTERS = {
-        'Fecha': str,
-        'Concepto': str,
-        'N° Movimiento': int,
-        'Referencia': str,
-        'Monto': parse_number,
-        'QUERY': str,
-        'CORREO': str,
-        'TELEFONO': str,
-        'REMITENTE': str,
-        'ESTADO DE REMEDIACION': str,
-        'EMAIL ID': str,
-        'WP ID': str,
-        'ARCHIVO': str
-    }
+    WP_CONVERTERS = WPHistoryConverters
+    WP_TYPES = WPHistoryTypes
+    WP_CONVERTERS_PRE_SAVE = WPHistoryConvertersPreSave
 
     # Constants
     DATE_FORMAT = '%d/%m/%Y %H:%M:%S'
@@ -67,7 +42,9 @@ class TransactionSheetService:
                 service_account_file=service_account_file,
                 sheet_id=sheet_id,
                 worksheet_name='Transacciones',
-                converters=self.CONVERTERS
+                converters=self.CONVERTERS,
+                types=self.TYPES,
+                converters_pre_save=self.CONVERTERS_PRE_SAVE
             )
         )
         
@@ -75,7 +52,10 @@ class TransactionSheetService:
             GoogleSheetsService(
                 service_account_file=service_account_file,
                 sheet_id=sheet_id,
-                worksheet_name='Historial_Correos'
+                worksheet_name='Historial_Correos',
+                converters=self.EMAILHISTORY_CONVERTERS,
+                types=self.EMAILHISTORY_TYPES,
+                converters_pre_save=self.EMAILHISTORY_CONVERTERS_PRE_SAVE
             )
         )
         
@@ -83,7 +63,10 @@ class TransactionSheetService:
             GoogleSheetsService(
                 service_account_file=service_account_file,
                 sheet_id=sheet_id,
-                worksheet_name='Historial_WP'
+                worksheet_name='Historial_WP',
+                converters=self.WP_CONVERTERS,
+                types=self.WP_TYPES,
+                converters_pre_save=self.WP_CONVERTERS_PRE_SAVE
             )
         )
         

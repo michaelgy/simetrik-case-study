@@ -43,3 +43,7 @@ class WhatsappMessagesQueue:
     def stop(self):
         self.message_queue.add_message("", "STOP")
         self.consumer_thread.join()
+        
+    def wait_until_queue_is_empty(self):
+        self.message_queue.join()
+        

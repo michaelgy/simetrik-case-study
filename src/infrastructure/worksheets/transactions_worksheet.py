@@ -36,12 +36,16 @@ class TransactionsWorksheet:
     def find(self, column_name: str, value: Any) -> Optional[pd.DataFrame]:
         """Find transactions matching the search criteria"""
         return self.service.find_row(column_name, value)
+    
+    def find_transaction(self, movement_number: str) -> Optional[pd.DataFrame]:
+        """Find and return a transaction by its N° Movimiento."""
+        return self.find('N° Movimiento', movement_number)
 
     def update(self, column_name: str, search_value: Any, update_data: Dict[str, Any]) -> bool:
         """Update a transaction"""
         return self.service.update_row(column_name, search_value, update_data)
 
-    def update_state(self, movement_number: int, new_state: str) -> bool:
+    def update_state(self, movement_number: str, new_state: str) -> bool:
         """
         Update the 'ESTADO DE REMEDIACION' of a transaction
         Args:

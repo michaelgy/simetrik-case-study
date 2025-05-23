@@ -11,6 +11,18 @@
             "module": "tests.gemini_multimodal_agent_test"
         },
         {
+            "name": "Python Debugger: Google Sheets Read Write Testing",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "tests.google_sheets_read_write_testing"
+        },
+        {
+            "name": "Python Debugger: Transaction Sheet Service Testing",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "tests.transaction_sheet_service_testing"
+        },
+        {
             "name": "Python Debugger: Main",
             "type": "debugpy",
             "request": "launch",

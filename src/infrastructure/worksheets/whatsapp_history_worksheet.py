@@ -43,7 +43,7 @@ class WhatsAppHistoryWorksheet:
         """Update a WhatsApp record"""
         return self.service.update_row(column_name, search_value, update_data)
 
-    def add_message(self, wp_id: str, message: str, movement_number: int) -> bool:
+    def add_message(self, wp_id: str, message: str, movement_number: str) -> bool:
         """
         Add a new message to the WhatsApp history
         Args:

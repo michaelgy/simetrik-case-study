@@ -2,7 +2,9 @@
 
 import os
 from dotenv import load_dotenv
+import pandas as pd
 from src.infrastructure.google_sheets_service import GoogleSheetsService
+from src.domain.types import TransactionsConverters, TransactionsTypes, TransactionsConvertersPreSave
 
 # Load environment variables
 load_dotenv("./env/.env")
@@ -12,43 +14,42 @@ service_account_file = './env/service_account_gmail-agent.json'
 sheet_id = os.getenv('GOOGLE_SHEET_TRANSACTION_ID')
 worksheet_name = 'Transacciones'
 
-sheets_service = GoogleSheetsService(service_account_file, sheet_id, worksheet_name)
-
+sheets_service = GoogleSheetsService(service_account_file, sheet_id, worksheet_name, TransactionsConverters, TransactionsTypes, TransactionsConvertersPreSave)
 # Example data to add
 new_rows = [
     {
         'Fecha': '2023-01-01',
         'Concepto': 'Pago Servicio',
-        'N° Movimiento': 1001,
+        'N° Movimiento': "1001",
         'Referencia': 'REF001',
         'Monto': 15000.0,
         'QUERY': 'Q1',
-        'CORREO': 'usuario1@correo.com',
-        'TELEFONO': '3001234567',
+        'CORREO': 'michael801898@gmail.com',
+        'TELEFONO': '+573187532458',
         'REMITENTE': 'Banco A',
         'ESTADO DE REMEDIACION': 'Pendiente'
     },
     {
         'Fecha': '2023-01-02',
         'Concepto': 'Transferencia',
-        'N° Movimiento': 1002,
+        'N° Movimiento': "1002",
         'Referencia': 'REF002',
         'Monto': 25000.0,
         'QUERY': 'Q2',
-        'CORREO': 'usuario2@correo.com',
-        'TELEFONO': '3002345678',
+        'CORREO': 'michael801898@gmail.com',
+        'TELEFONO': '+573135432343',
         'REMITENTE': 'Banco B',
         'ESTADO DE REMEDIACION': 'Completado'
     },
     {
         'Fecha': '2023-01-03',
         'Concepto': 'Compra en Línea',
-        'N° Movimiento': 1003,
+        'N° Movimiento': "1003",
         'Referencia': 'REF003',
         'Monto': 35000.0,
         'QUERY': 'Q3',
-        'CORREO': 'usuario3@correo.com',
-        'TELEFONO': '3003456789',
+        'CORREO': 'michael801898@gmail.com',
+        'TELEFONO': '+573135432343',
         'REMITENTE': 'Banco C',
         'ESTADO DE REMEDIACION': 'En Proceso'
     }
@@ -62,7 +63,7 @@ for row in new_rows:
         print(f"Failed to add row with N° Movimiento: {row['N° Movimiento']}")
 
 # Find a specific row
-movement_number = 1002
+movement_number = "1002"
 found_rows = sheets_service.find_row('N° Movimiento', movement_number)
 if found_rows is not None:
     print(f"\nFound rows with N° Movimiento {movement_number}:")
@@ -84,6 +85,7 @@ else:
 all_data = sheets_service.read_all_data()
 print("\nAll data in memory:")
 print(all_data)
+print(all_data.dtypes)
 
 # Save all changes to the worksheet
 if sheets_service.save_changes():

@@ -6,7 +6,7 @@ from gspread_dataframe import set_with_dataframe, get_as_dataframe
 from google.oauth2.service_account import Credentials
 
 class GoogleSheetsService:
-    def __init__(self, service_account_file: str, sheet_id: str, worksheet_name: str, converters: Dict[str, Any] = None):
+    def __init__(self, service_account_file: str, sheet_id: str, worksheet_name: str, converters: Dict[str, Any] = None, types: Dict[str, Any] = None, converters_pre_save: Dict[str, Any] = {}):
         """
         Initialize the Google Sheets Service
         Args:
@@ -24,6 +24,8 @@ class GoogleSheetsService:
         self.worksheet = self._initialize_worksheet()
         # Initialize DataFrame from worksheet
         self.converters = converters
+        self.types = types
+        self.converters_pre_save = converters_pre_save
         self._df = self._load_dataframe()
 
     def _initialize_worksheet(self):
@@ -46,7 +48,11 @@ class GoogleSheetsService:
         Returns:
             DataFrame containing worksheet data
         """
-        return get_as_dataframe(self.worksheet, converters=self.converters)
+        df = get_as_dataframe(self.worksheet, converters=self.converters)
+        if(self.types is not None):
+            df = df.astype(self.types)
+        df = df.dropna(how='all')
+        return df
 
     def read_all_data(self) -> pd.DataFrame:
         """
@@ -65,9 +71,11 @@ class GoogleSheetsService:
             bool: True if successful, False otherwise
         """
         try:
+            original_dtypes = self._df.dtypes
             # Add new row to DataFrame
             new_df = pd.concat([self._df, pd.DataFrame([row_data])], ignore_index=True)
             self._df = new_df
+            self._df = self._df.astype(original_dtypes)
             return True
         except Exception as e:
             print(f"Error adding row: {e}")
@@ -135,7 +143,10 @@ class GoogleSheetsService:
             bool: True if successful, False otherwise
         """
         try:
-            set_with_dataframe(self.worksheet, self._df)
+            save_df = self._df.copy()
+            for col, converter in self.converters_pre_save.items():
+                save_df[col] = save_df[col].apply(converter)
+            set_with_dataframe(self.worksheet, save_df)
             return True
         except Exception as e:
             print(f"Error saving changes to worksheet: {e}")

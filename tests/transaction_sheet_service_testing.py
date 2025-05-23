@@ -21,12 +21,12 @@ transactions_data = [
     {
         'Fecha': '01-01-2023',
         'Concepto': 'Pago Servicio',
-        'N° Movimiento': 1001,
+        'N° Movimiento': "1001",
         'Referencia': 'REF001',
         'Monto': 15000.0,
         'QUERY': 'Q1',
-        'CORREO': 'usuario1@correo.com',
-        'TELEFONO': '3001234567',
+        'CORREO': 'michael801898@gmail.com',
+        'TELEFONO': '+573187532458',
         'REMITENTE': 'Banco A',
         'ESTADO DE REMEDIACION': 'Pendiente',
         'EMAIL ID': 'email_001',
@@ -36,12 +36,12 @@ transactions_data = [
     {
         'Fecha': '02-01-2023',
         'Concepto': 'Transferencia',
-        'N° Movimiento': 1002,
+        'N° Movimiento': "1002",
         'Referencia': 'REF002',
         'Monto': 25000.0,
         'QUERY': 'Q2',
-        'CORREO': 'usuario2@correo.com',
-        'TELEFONO': '3002345678',
+        'CORREO': 'michael801898@gmail.com',
+        'TELEFONO': '+573135432343',
         'REMITENTE': 'Banco B',
         'ESTADO DE REMEDIACION': 'Completado',
         'EMAIL ID': 'email_002',
@@ -51,12 +51,12 @@ transactions_data = [
     {
         'Fecha': '03-01-2023',
         'Concepto': 'Compra en Línea',
-        'N° Movimiento': 1003,
+        'N° Movimiento': "1003",
         'Referencia': 'REF003',
         'Monto': 35000.0,
         'QUERY': 'Q3',
-        'CORREO': 'usuario3@correo.com',
-        'TELEFONO': '3003456789',
+        'CORREO': 'michael801898@gmail.com',
+        'TELEFONO': '+573135432343',
         'REMITENTE': 'Banco C',
         'ESTADO DE REMEDIACION': 'En Proceso',
         'EMAIL ID': 'email_003',
@@ -75,7 +75,7 @@ for transaction in transactions_data:
 
 # Find a specific transaction
 print("\nFinding transaction:")
-movement_number = 1002
+movement_number = "1002"
 found_transaction = transaction_service.transactions.find('N° Movimiento', movement_number)
 if found_transaction is not None and not found_transaction.empty:
     print(f"Found transaction with N° Movimiento {movement_number}:")
@@ -96,7 +96,7 @@ print("\nUpdating transaction fields:")
 update_data = {
     'Concepto': 'Pago Servicio Actualizado',
     'Monto': 17500.0,
-    'REMITENTE': 'Banco A Actualizado'
+    'REMITENTE': 'Banco D'
 }
 if transaction_service.transactions.update('N° Movimiento', movement_number, update_data):
     print(f"Updated fields of transaction {movement_number}:")
