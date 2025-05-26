@@ -1,0 +1,123 @@
+Simetrik Case Study - Remediation Agent
+=====================================
+
+1. Project Overview
+------------------
+The Simetrik Remediation Agent is an automated system designed to handle transaction remediation requests through multiple communication channels. It processes transaction files, manages communication history, and maintains transaction states in a structured manner.
+
+2. Technologies Used
+-------------------
+- Python 3.8+
+- Flask (Web Framework)
+- Google Cloud Services:
+  * Gmail API
+  * Google Drive API
+  * Google Sheets API
+- WhatsApp Business API (Wasender)
+- Docker (Containerization)
+- LangChain & Gemini (AI/ML)
+
+3. Design Patterns
+-----------------
+1. Clean Architecture:
+   - Domain Layer: Core business logic and entities
+   - Application Layer: Use cases and business rules
+   - Infrastructure Layer: External services integration
+
+2. Repository Pattern:
+   - Abstracts data access
+   - Provides consistent interface for data operations
+   - Example: GoogleSheetsService implementation
+
+3. Factory Pattern:
+   - Service creation and configuration
+   - Blueprint creation for Flask routes
+
+4. Observer Pattern:
+   - WhatsApp message queue system
+   - Event-driven communication handling
+
+5. Strategy Pattern:
+   - Different communication strategies (Email/WhatsApp)
+   - Multiple file processing strategies
+
+4. Key Features
+--------------
+1. File Processing:
+   - XLSX file parsing
+   - Transaction validation
+   - Automatic categorization
+
+2. Communication:
+   - Email automation
+   - WhatsApp messaging
+   - Message queue system
+   - Communication history tracking
+
+3. State Management:
+   - Transaction state tracking
+   - Remediation status monitoring
+   - History logging
+
+4. Integration:
+   - Google Services integration
+   - WhatsApp API integration
+   - REST API endpoints
+
+5. Tools and Utilities
+---------------------
+1. Development Tools:
+   - Git (Version Control)
+   - Docker (Containerization)
+   - VS Code/PyCharm (IDE)
+
+2. Testing Tools:
+   - Python unittest
+   - Test scripts for each component
+   - Integration tests
+
+3. Monitoring Tools:
+   - Logging system
+   - Error tracking
+   - Performance monitoring
+
+6. Project Structure
+-------------------
+1. src/
+   - application/: API handlers and business logic
+   - domain/: Core business entities and types
+   - infrastructure/: External service integrations
+   - main.py: Application entry point
+
+2. tests/
+   - Component-specific test files
+   - Integration tests
+   - Test utilities
+
+3. env/
+   - Environment configuration
+   - Service account credentials
+
+7. Future Improvements
+---------------------
+1. Enhanced Error Handling:
+   - More robust error recovery
+   - Better error reporting
+
+2. Performance Optimization:
+   - Caching mechanisms
+   - Batch processing
+
+3. Additional Features:
+   - More communication channels
+   - Advanced analytics
+   - Machine learning integration
+
+4. Security Enhancements:
+   - Enhanced authentication
+   - Better encryption
+   - Audit logging
+
+8. Conclusion
+------------
+The Simetrik Remediation Agent demonstrates a well-structured, maintainable, and scalable solution for automated transaction remediation. It showcases modern software development practices, clean architecture principles, and effective integration of various services and APIs. 

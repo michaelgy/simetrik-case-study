@@ -17,6 +17,12 @@
             "module": "tests.google_sheets_read_write_testing"
         },
         {
+            "name": "Python Debugger: Gmail Read Testing",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "tests.gmail_test_read_emails"
+        },
+        {
             "name": "Python Debugger: Transaction Sheet Service Testing",
             "type": "debugpy",
             "request": "launch",
