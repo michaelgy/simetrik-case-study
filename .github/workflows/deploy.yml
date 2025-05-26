@@ -12,6 +12,13 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v3
 
+            - name: Reconstruct files from secrets
+              run: |
+                  mkdir -p env
+                  # The files are expected to be encoded in base 64
+                  echo "${{ secrets.ENV_B64 }}" | base64 --decode > env/.env
+                  echo "${{ secrets.SERVICE_ACCOUNT_B64 }}" | base64 --decode > env/service_account_gmail-agent.json
+
             - name: Set up Cloud SDK
               uses: google-github-actions/setup-gcloud@v1
               with:
