@@ -3,6 +3,7 @@ from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage
 from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import MemorySaver
+import logging
 
 class GeminiTextAgent:
     def __init__(self, tools: List[Any] = None, max_iterations: int = 15, max_execution_time: int = 60):
@@ -49,7 +50,7 @@ class GeminiTextAgent:
             {"messages": [HumanMessage(content=message)]}, 
             config
         ):
-            print("chunk", chunk)
+            logging.info(f"chunk: {chunk}")
             if "agent" in chunk:
                 response = "\n".join([ch.content for ch in chunk["agent"]["messages"]])
                 response_chunks.append(response)
@@ -60,12 +61,12 @@ class GeminiTextAgent:
         """
         Start an interactive session with the agent
         """
-        print("Starting interactive session. Type 'exit' to quit.")
+        logging.info("Starting interactive session. Type 'exit' to quit.")
         while True:
-            message = input("[query]<< ")
-            if message.lower() == "exit":
+            user_input = input("You: ")
+            if user_input.lower() == 'exit':
                 break
             
-            response = self.process_message(message)
-            print("[response]>>", response)
-            print("----") 
+            response = self.process_message(user_input)
+            logging.info(f"[response]>> {response}")
+            logging.info("----") 

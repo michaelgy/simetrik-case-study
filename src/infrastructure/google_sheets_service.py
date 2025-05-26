@@ -4,6 +4,7 @@ import pandas as pd
 import gspread
 from gspread_dataframe import set_with_dataframe, get_as_dataframe
 from google.oauth2.service_account import Credentials
+import logging
 
 class GoogleSheetsService:
     def __init__(self, service_account_file: str, sheet_id: str, worksheet_name: str, converters: Dict[str, Any] = None, types: Dict[str, Any] = None, converters_pre_save: Dict[str, Any] = {}):
@@ -78,7 +79,7 @@ class GoogleSheetsService:
             self._df = self._df.astype(original_dtypes)
             return True
         except Exception as e:
-            print(f"Error adding row: {e}")
+            logging.error(f"Error adding row: {e}")
             return False
 
     def find_row(self, column_name: str, value: Any) -> Optional[pd.DataFrame]:
@@ -94,7 +95,7 @@ class GoogleSheetsService:
             matches = self._df[self._df[column_name] == value]
             return matches.copy() if not matches.empty else None
         except Exception as e:
-            print(f"Error finding row: {e}")
+            logging.error(f"Error finding row: {e}")
             return None
 
     def update_row(self, column_name: str, search_value: Any, update_data: Dict[str, Any]) -> bool:
@@ -111,7 +112,7 @@ class GoogleSheetsService:
             # Find the row index
             mask = self._df[column_name] == search_value
             if not mask.any():
-                print(f"No row found with {column_name} = {search_value}")
+                logging.warning(f"No row found with {column_name} = {search_value}")
                 return False
             
             # Update the row in DataFrame
@@ -120,7 +121,7 @@ class GoogleSheetsService:
             
             return True
         except Exception as e:
-            print(f"Error updating row: {e}")
+            logging.error(f"Error updating row: {e}")
             return False
 
     def clear_data(self) -> bool:
@@ -133,7 +134,7 @@ class GoogleSheetsService:
             self._df = pd.DataFrame(columns=self._df.columns)
             return True
         except Exception as e:
-            print(f"Error clearing data: {e}")
+            logging.error(f"Error clearing data: {e}")
             return False
 
     def save_changes(self) -> bool:
@@ -149,7 +150,7 @@ class GoogleSheetsService:
             set_with_dataframe(self.worksheet, save_df)
             return True
         except Exception as e:
-            print(f"Error saving changes to worksheet: {e}")
+            logging.error(f"Error saving changes to worksheet: {e}")
             return False
 
     def reload_data(self) -> bool:
@@ -162,5 +163,5 @@ class GoogleSheetsService:
             self._df = self._load_dataframe()
             return True
         except Exception as e:
-            print(f"Error reloading data: {e}")
+            logging.error(f"Error reloading data: {e}")
             return False 

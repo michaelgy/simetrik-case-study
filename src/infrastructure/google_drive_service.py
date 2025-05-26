@@ -4,6 +4,7 @@ from io import BytesIO
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseUpload
+import logging
 
 class GoogleDriveService:
     def __init__(self, service_account_file: str, folder_id: str):
@@ -62,7 +63,7 @@ class GoogleDriveService:
 
             return file.get('id')
         except Exception as e:
-            print(f"Error uploading file to Google Drive: {e}")
+            logging.error(f"Error uploading file to Google Drive: {e}")
             return None
 
     def get_file_url(self, file_id: str) -> Optional[str]:
@@ -80,5 +81,5 @@ class GoogleDriveService:
             ).execute()
             return file.get('webViewLink')
         except Exception as e:
-            print(f"Error getting file URL: {e}")
+            logging.error(f"Error getting file URL: {e}")
             return None 

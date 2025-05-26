@@ -1,6 +1,7 @@
 from threading import Thread
 from queue import Queue
 import time
+import logging
 
 class WhatsappMessagesQueue:
 
@@ -23,16 +24,16 @@ class WhatsappMessagesQueue:
             sended = False
             try:
                 sended = self.whatsapp_service.send_message(cellphone, message)
+                result = "send successfully" if sended else "wasn't sended"
+                logging.info(f"Message {result} to {cellphone}-{wp_id}")
             except Exception as e:
-                print(f"Error sending message to {cellphone}: {str(e)}", end="")
-
-            if(not sended and retry_count < self.MAX_RETRIES):
-                self.put_message(cellphone, message, wp_id, retry_count + 1)
-                print("Retrying...")
-            elif(not sended and retry_count >= self.MAX_RETRIES):
-                print("Max retries reached")
-            else:
-                print(f"Message sent successfully to {cellphone}-{wp_id}")
+                logging.error(f"Error sending message to {cellphone}: {str(e)}", end="")
+                if retry_count < self.MAX_RETRIES:
+                    logging.info("Retrying...")
+                    retry_count += 1
+                else:
+                    logging.warning("Max retries reached")
+                    break
 
             self.message_queue.task_done()
             time.sleep(self.CALL_DELAY)

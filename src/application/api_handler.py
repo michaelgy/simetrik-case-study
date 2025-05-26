@@ -2,6 +2,7 @@
 import os
 from flask import Flask
 from flask_cors import CORS
+import logging
 
 # Infrastructure
 from src.infrastructure.google_drive_service import GoogleDriveService
@@ -23,6 +24,8 @@ from src.application.text_chat_agent_handler import create_text_chat_agent_bluep
 class APIHandler:
     def __init__(self):
         self.app = Flask(__name__)
+        self.app.logger.setLevel(logging.INFO)
+        
         CORS(self.app)
 
         # constans
@@ -59,13 +62,13 @@ class APIHandler:
             self.whatsapp_messages_queue
         ))
     
-    def run(self, host: str = '127.0.0.1', port: int = 5001):
-        print("Starting Api Handler server...")
-        print(f"Server running at: http://{host}:{port}")
-        print(f"Use ngrok to expose the api: ngrok http --url=hamster-innocent-cicada.ngrok-free.app http://{host}:{port}")
+    def run(self, host: str = "0.0.0.0", port: int = 8080):
+        self.app.logger.info("Starting Api Handler server...")
+        self.app.logger.info(f"Server running at: http://{host}:{port}")
+        self.app.logger.info(f"Use ngrok to expose the api: ngrok http --url=hamster-innocent-cicada.ngrok-free.app http://{host}:{port}")
 
-        print("### Available endpoints:")
+        self.app.logger.info("### Available endpoints:")
         for rule in self.app.url_map.iter_rules():
-            print(f"- {rule.endpoint:60s} {','.join(rule.methods):20s} {rule}")
+            self.app.logger.info(f"- {rule.endpoint:60s} {','.join(rule.methods):20s} {rule}")
         
         self.app.run(host=host, port=port)

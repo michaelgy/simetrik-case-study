@@ -1,6 +1,7 @@
 import os
 import requests
 from typing import Optional
+import logging
 
 class WhatsAppService:
     def __init__(self):
@@ -36,7 +37,7 @@ class WhatsAppService:
             response.raise_for_status()
             return True
         except Exception as e:
-            print(f"Error sending WhatsApp message: {e}")
+            logging.error(f"Error sending WhatsApp message: {e}")
             return False
 
     def process_incoming_message(self, webhook_data: dict) -> Optional[tuple]:
@@ -60,5 +61,5 @@ class WhatsAppService:
                     if not from_me and sender_id and message_text:
                         return sender_id, message_text
         except Exception as e:
-            print(f"Error processing webhook data: {e}")
+            logging.error(f"Error processing webhook data: {e}")
         return None 

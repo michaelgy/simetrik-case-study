@@ -4,6 +4,7 @@ from flask import Blueprint, request, jsonify
 import pandas as pd
 import secrets
 import string
+import logging
 
 from src.infrastructure.worksheets.states_worksheet import StatesWorksheet
 
@@ -91,7 +92,7 @@ def create_file_processor_blueprint(file_parser, transaction_service, google_dri
                         protocol_2b_df.at[index, 'EMAIL ID'] = email_id
                     except Exception as e:
                         protocol_2b_index_to_drop.append(index)
-                        print(f"Error sending email to {row['CORREO']} from {email_service.user_email}: {str(e)}")
+                        logging.error(f"Error sending email to {row['CORREO']} from {email_service.user_email}: {str(e)}")
 
             protocol_2b_df.drop(protocol_2b_index_to_drop, inplace=True)
 
@@ -108,7 +109,7 @@ def create_file_processor_blueprint(file_parser, transaction_service, google_dri
                         protocol_3c_df.at[index, 'WP ID'] = wp_id
                     except Exception as e:
                         protocol_3c_index_to_drop.append(index)
-                        print(f"Error sending whatsapp message to {cellphone}: {str(e)}")
+                        logging.error(f"Error sending whatsapp message to {cellphone}: {str(e)}")
 
             protocol_3c_df.drop(protocol_3c_index_to_drop, inplace=True)
 

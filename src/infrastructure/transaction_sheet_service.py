@@ -7,6 +7,7 @@ from .worksheets.email_history_worksheet import EmailHistoryWorksheet
 from .worksheets.whatsapp_history_worksheet import WhatsAppHistoryWorksheet
 from .worksheets.states_worksheet import StatesWorksheet
 from src.domain.types import TransactionsConverters, TransactionsTypes, TransactionsConvertersPreSave, EmailHistoryConverters, EmailHistoryConvertersPreSave,EmailHistoryTypes, WPHistoryTypes, WPHistoryConverters, WPHistoryConvertersPreSave
+import logging
 
 
 class TransactionSheetService:
@@ -91,7 +92,7 @@ class TransactionSheetService:
             # Find the transaction by EMAIL ID
             transaction = self.transactions.find('EMAIL ID', email_id)
             if transaction is None or transaction.empty:
-                print(f"No transaction found with EMAIL ID: {email_id}")
+                logging.warning(f"No transaction found with EMAIL ID: {email_id}")
                 return False
 
             # Get the movement number
@@ -100,7 +101,7 @@ class TransactionSheetService:
             # Add the message
             return self.email_history.add_message(email_id, message, movement_number)
         except Exception as e:
-            print(f"Error adding email message: {e}")
+            logging.error(f"Error adding email message: {e}")
             return False
 
     def add_whatsapp_message(self, wp_id: str, message: str) -> bool:
@@ -116,7 +117,7 @@ class TransactionSheetService:
             # Find the transaction by WP ID
             transaction = self.transactions.find('WP ID', wp_id)
             if transaction is None or transaction.empty:
-                print(f"No transaction found with WP ID: {wp_id}")
+                logging.warning(f"No transaction found with WP ID: {wp_id}")
                 return False
 
             # Get the movement number
@@ -125,7 +126,7 @@ class TransactionSheetService:
             # Add the message
             return self.whatsapp_history.add_message(wp_id, message, movement_number)
         except Exception as e:
-            print(f"Error adding WhatsApp message: {e}")
+            logging.error(f"Error adding WhatsApp message: {e}")
             return False
 
     def save_all_changes(self) -> bool:
@@ -147,7 +148,7 @@ class TransactionSheetService:
                 states_saved
             ])
         except Exception as e:
-            print(f"Error saving changes: {e}")
+            logging.error(f"Error saving changes: {e}")
             return False
 
     def reload_all_data(self) -> bool:
@@ -169,5 +170,5 @@ class TransactionSheetService:
                 states_reloaded
             ])
         except Exception as e:
-            print(f"Error reloading data: {e}")
+            logging.error(f"Error reloading data: {e}")
             return False
