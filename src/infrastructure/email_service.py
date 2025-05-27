@@ -3,6 +3,7 @@ from googleapiclient.discovery import build
 from email.mime.text import MIMEText
 import base64
 import logging
+from mailparser_reply import EmailReplyParser
 from typing import Dict, List, Optional, Any
 
 class EmailService:
@@ -64,7 +65,7 @@ class EmailService:
             body, attachments = self._extract_body_and_attachments(payload)
 
             # Mark the message as read
-            self._mark_as_read(message_id)
+            #self._mark_as_read(message_id)
 
             return {
                 'id': message_id,
@@ -121,7 +122,8 @@ class EmailService:
                 if data:
                     try:
                         decoded_data = base64.urlsafe_b64decode(data).decode('utf-8')
-                        body_text += decoded_data + "\n"
+                        latest_reply = EmailReplyParser(languages=['en', 'es']).parse_reply(text=decoded_data)
+                        body_text += latest_reply.strip() + "\n"
                     except Exception as e:
                         logging.error(f"Error decoding body text: {e}")
 

@@ -1,0 +1,12 @@
+- Create a service that every 30s read all unreaded messages, verify in the transaction table
+if the received email correspond to one of the transaction EMAIL ID, if so, verify that is in one of the
+states to automatically respond, if so, using an agent validate the text message (if any) talks about
+the requested files and validate that the attached file (if any) fullfil the requirements,
+then move to complete and save the attachment, if not move to an attempt state or to manual processing to avoid
+further processing
+- Update the wp_webhook_handler, when a message arrives verify in the transaction table 
+if the received wp message correspond to one of the transaction WP ID, if so, verify that is in one of the
+states to automatically respond, if so, using an agent validate the text message (if any) talks about
+the requested files and validate that the attached file (if any) fullfil the requirements,
+then move to complete and save the attachment, if not move to an attempt state or to manual processing to avoid
+further processing.

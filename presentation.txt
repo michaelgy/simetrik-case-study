@@ -69,17 +69,19 @@ The Simetrik Remediation Agent is an automated system designed to handle transac
 1. Development Tools:
    - Git (Version Control)
    - Docker (Containerization)
-   - VS Code/PyCharm (IDE)
+   - Cursor (IDE)
 
-2. Testing Tools:
-   - Python unittest
+2. API's and platform:
+   - WASender
+   - Google Workspace
+
+3. Testing Tools:
    - Test scripts for each component
    - Integration tests
 
-3. Monitoring Tools:
+4. Monitoring Tools:
    - Logging system
    - Error tracking
-   - Performance monitoring
 
 6. Project Structure
 -------------------
@@ -100,23 +102,16 @@ The Simetrik Remediation Agent is an automated system designed to handle transac
 
 7. Future Improvements
 ---------------------
-1. Enhanced Error Handling:
+1. Logging and Error handling:
    - More robust error recovery
    - Better error reporting
+   - Use of a better system for loggin
 
 2. Performance Optimization:
    - Caching mechanisms
    - Batch processing
+   - Use of persistance data 
 
-3. Additional Features:
-   - More communication channels
-   - Advanced analytics
-   - Machine learning integration
-
-4. Security Enhancements:
-   - Enhanced authentication
-   - Better encryption
-   - Audit logging
 
 8. Conclusion
 ------------

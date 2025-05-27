@@ -31,40 +31,45 @@ def main():
     unread_emails = email_service.read_unread_emails(max_results=3)
 
     logging.info(f"Found {len(unread_emails)} unread messages\n")
-
+    
+    results = []
     for email in unread_emails:
-        logging.info("=" * 80)
-        logging.info(f"From: {email['from']}")
-        logging.info(f"Subject: {email['subject']}")
-        logging.info(f"Message ID: {email['id']}")
+        result = "\n"
+        
+        result += "=" * 80 + "\n"
+        result += f"From: {email['from']}" + "\n"
+        result += f"Subject: {email['subject']}" + "\n"
+        result += f"Message ID: {email['id']}" + "\n"
         
         # Display body
         if email['body']:
-            logging.info("\nBody:")
-            logging.info("-" * 40)
-            logging.info(email['body'])
-            logging.info("-" * 40)
+            result += "\nBody:" + "\n"
+            result += "-" * 40 + "\n"
+            result += email['body'] + "\n"
+            result += "-" * 40 + "\n"
         else:
-            logging.info("\n[No text body found]")
-
+            result += "\n[No text body found]" + "\n"
+            
         # Display attachments
         if email['attachments']:
-            logging.info("\nAttachments:")
+            result += "\nAttachments:" + "\n"
             for attachment in email['attachments']:
-                logging.info(f"- {attachment['filename']}")
-                logging.info(f"  Type: {attachment['mime_type']}")
-                logging.info(f"  Size: {format_size(attachment['size'])}")
+                result += f"- {attachment['filename']}" + "\n"
+                result += f"  Type: {attachment['mime_type']}" + "\n"
+                result += f"  Size: {format_size(attachment['size'])}" + "\n"
                 
                 # Download and show first few bytes of each attachment
                 content = email_service.get_attachment(email['id'], attachment['attachment_id'])
                 if content:
                     preview = content[:100] if len(content) > 100 else content
-                    logging.info(f"  Preview: {preview}")
-                logging.info("")
+                    result += f"  Preview: {preview}" + "\n"
+                result += ""
         else:
-            logging.info("\n[No attachments found]")
+            result += "\n[No attachments found]" + "\n"
         
-        logging.info("=" * 80 + "\n")
+        result += "=" * 80 + "\n"
+        results.append(result)
+    logging.info("\n".join(results))
 
 if __name__ == "__main__":
     main()

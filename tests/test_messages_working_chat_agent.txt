@@ -1,0 +1,5 @@
+- Muestrame todas las transacciones que se encuentran en Procesamiento manual
+- Por cada estado de remediación, cuantas transacciones hay?
+- Cual es el n° movimiento de la transaccion con mayor y menor monto
+- Hay alguna transaccion que tenga ARCHIVO
+- Cuales transacciones tienen EMAIL ID
